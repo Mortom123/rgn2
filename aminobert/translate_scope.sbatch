@@ -32,5 +32,4 @@ python3 translate_scope.py
 echo "Finished at `date`"
 echo "__DONE__"
 
-
-singularity exec --nv -C -e -B ${WD}:${WD} -B /beegfs/.global1/ws/s0794732-aminobert/embeddings -B /beegfs/.global1/ws/s0794732-aminobert/checkpoint_aminobert:${WD}/checkpoint --pwd ${WD} ${IMAGE} python3 translate_scope.py
+# singularity exec --nv -C -e -B ${WD}:${WD} -B /beegfs/.global1/ws/s0794732-aminobert/embeddings -B /beegfs/.global1/ws/s0794732-aminobert/checkpoint_aminobert:${WD}/checkpoint --pwd ${WD} ${IMAGE} python3 translate_scope.py

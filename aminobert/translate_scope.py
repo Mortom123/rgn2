@@ -89,8 +89,6 @@ headers, seqs = fasta_read(sequence_path)
 headers = [h for h in headers]
 seqs = [s + '*' for s in seqs]
 
-fastas = headers
-
 print(len(seqs), len(headers))
 
 # Prepend an M. Again reflective of how the model
@@ -107,17 +105,29 @@ print('Sequences being removed:', np.array(headers)[~mask], np.array(seqs)[~mask
 
 seqs = list(np.array(seqs)[mask])
 headers = list(np.array(headers)[mask])
-fastas = list(np.array(fastas)[mask])
 
-qfunc = np.random.randn(len(seqs)) # dummy labels. Ignore this.
-inf_result = run_prediction(seqs, qfunc, CHECKPOINT)
 
-embedding_dir = "/beegfs/.global1/ws/s0794732-aminobert/embeddings"
-print('Writing numpy arrays to', embedding_dir)
-for j in range(len(seqs)):
-    embedding = inf_result['predict']['seq_output'][j]
-    assert embedding.shape[0] == len(seqs[j])
-    #assert headers[j] in fastas[j], (headers[j], fastas[j])
+def batched(iterable, n=1):
+    current_batch = []
+    for item in iterable:
+        current_batch.append(item)
+        if len(current_batch) == n:
+            yield current_batch
+            current_batch = []
+    if current_batch:
+        yield current_batch
 
-    outfile = os.path.join(embedding_dir, headers[j] + '.npy')
-    np.save(outfile, embedding)
+
+for bheaders, bseqs in batched(zip(headers, seqs), n=300):
+    qfunc = np.random.randn(len(bseqs))  # dummy labels. Ignore this.
+    inf_result = run_prediction(bseqs, qfunc, CHECKPOINT)
+
+    embedding_dir = "/beegfs/.global1/ws/s0794732-aminobert/embeddings"
+    print('Writing numpy arrays to', embedding_dir)
+    for j in range(len(bseqs)):
+        embedding = inf_result['predict']['seq_output'][j]
+        header = bheaders[j]
+        assert embedding.shape[0] == len(bseqs[j])
+
+        outfile = os.path.join(embedding_dir, header + '.npy')
+        np.save(outfile, embedding)
