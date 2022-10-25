@@ -117,8 +117,8 @@ def batched(iterable, n=1):
     if current_batch:
         yield current_batch
 
-
-for bheaders, bseqs in batched(zip(headers, seqs), n=300):
+batch_size = 300
+for bheaders, bseqs in zip(batched(headers, n=batch_size), batched(seqs, n=batch_size)):
     qfunc = np.random.randn(len(bseqs))  # dummy labels. Ignore this.
     inf_result = run_prediction(bseqs, qfunc, CHECKPOINT)
 
