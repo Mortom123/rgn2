@@ -80,16 +80,14 @@ def fasta_read(fasta_file):
 
 
 # Sequences to predict structures for. 1 sequence per fasta.
-fastas = ["scope.fasta"]
-print(len(fastas))
-
+sequence_path = "scope.fasta"
 # Read in sequences.
-headers, seqs = zip(*[fasta_read(f) for f in fastas])
+headers, seqs = fasta_read(sequence_path)
 
 # Add a stop char to each sequence to be consistent
 # with how the model was trained.
-headers = [h[0] for h in headers]
-seqs = [s[0] + '*' for s in seqs]
+headers = [h for h in headers]
+seqs = [s + '*' for s in seqs]
 
 print(len(seqs), len(headers))
 
