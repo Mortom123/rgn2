@@ -89,6 +89,10 @@ headers, seqs = fasta_read(sequence_path)
 headers = [h for h in headers]
 seqs = [s + '*' for s in seqs]
 
+fastas = [sequence_path]
+headers = [headers]
+seqs = [seqs]
+
 print(len(seqs), len(headers))
 
 # Prepend an M. Again reflective of how the model
