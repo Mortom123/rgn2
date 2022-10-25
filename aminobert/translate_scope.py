@@ -89,9 +89,7 @@ headers, seqs = fasta_read(sequence_path)
 headers = [h for h in headers]
 seqs = [s + '*' for s in seqs]
 
-fastas = [sequence_path]
-headers = [headers]
-seqs = [seqs]
+fastas = headers
 
 print(len(seqs), len(headers))
 
