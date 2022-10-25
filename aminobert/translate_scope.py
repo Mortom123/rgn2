@@ -113,8 +113,9 @@ inf_result = run_prediction(seqs, qfunc, CHECKPOINT)
 embedding_dir = "/beegfs/.global1/ws/s0794732-aminobert/embeddings"
 print('Writing numpy arrays to', embedding_dir)
 for j in range(len(seqs)):
-    assert inf_result['predict']['seq_output'][j].shape[0] == len(seqs[j])
-    assert headers[j] in fastas[j], (headers[j], fastas[j])
+    embedding = inf_result['predict']['seq_output'][j]
+    assert embedding.shape[0] == len(seqs[j])
+    #assert headers[j] in fastas[j], (headers[j], fastas[j])
 
-    outfile = os.path.join(embedding_dir, fastas[j] + '.npy')
-    np.save(outfile, inf_result['predict']['seq_output'][j])
+    outfile = os.path.join(embedding_dir, headers[j] + '.npy')
+    np.save(outfile, embedding)
