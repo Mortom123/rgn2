@@ -91,6 +91,8 @@ headers, seqs = zip(*[fasta_read(f) for f in fastas])
 headers = [h[0] for h in headers]
 seqs = [s[0] + '*' for s in seqs]
 
+print(len(seqs), len(headers))
+
 # Prepend an M. Again reflective of how the model
 # was trained.
 if PREPEND_M:
