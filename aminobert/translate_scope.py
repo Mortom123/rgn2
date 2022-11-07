@@ -127,12 +127,13 @@ for bheaders, bseqs in zip(batched(headers, n=batch_size), batched(seqs, n=batch
     for j in range(len(bseqs)):
         embedding = inf_result['predict']['seq_output'][j]
         header = bheaders[j]
-        assert embedding.shape[0] == len(bseqs[j])
+        seq = bseqs[j]
+        assert embedding.shape[0] == len(seq)
 
         if PREPEND_M:
-            embedding = embedding[1:-1]  # cut of start and end token (previously added)
-        else:
-            embedding = embedding[1:]  # cut of start token (previously added)
+            if seq[0] != 'M':
+                embedding = embedding[1:]  # cut of start token (previously added)
+            embedding = embedding[1:-1]  # cut of end token (previously added)
 
         outfile = os.path.join(embedding_dir, header + '.npy')
         np.save(outfile, embedding)
