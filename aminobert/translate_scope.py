@@ -129,5 +129,10 @@ for bheaders, bseqs in zip(batched(headers, n=batch_size), batched(seqs, n=batch
         header = bheaders[j]
         assert embedding.shape[0] == len(bseqs[j])
 
+        if PREPEND_M:
+            embedding = embedding[1:-1]  # cut of start and end token (previously added)
+        else:
+            embedding = embedding[1:]  # cut of start token (previously added)
+
         outfile = os.path.join(embedding_dir, header + '.npy')
         np.save(outfile, embedding)
